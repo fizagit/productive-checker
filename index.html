@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Am I Being Productive?</title>
+  <style>
+    body {
+      background-color: #f4f4f4;
+      color: #333;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 40px;
+    }
+
+    #response {
+      font-size: 1.8em;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Am I Being Productive?</h1>
+  <div id="response">Let's find out...</div>
+  <button onclick="checkProductivity()">Check Again</button>
+
+  <script>
+    const responses = [
+      "No. Checking this website doesn't count.",
+      "You’re avoiding something, aren’t you?",
+      "At least you're not on TikTok. Or are you?",
+      "You opened this instead of working? Nice.",
+      "Hmm... does scrolling count as progress?",
+      "Yes. You made it here. That's something.",
+      "Debatable. But you showed up, so good job.",
+      "Maybe... but that to-do list says otherwise.",
+      "You’re thinking about being productive. Step one complete!",
+      "Go drink some water and then try again."
+    ];
+
+    function checkProductivity() {
+      const random = Math.floor(Math.random() * responses.length);
+      document.getElementById("response").innerText = responses[random];
+    }
+
+    // Show a random response on first load too
+    checkProductivity();
+  </script>
+
+</body>
+</html>

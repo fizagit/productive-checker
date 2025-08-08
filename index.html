@@ -3,16 +3,598 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Am I Being Productive?</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Productivity Pulse Check</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --productive: #00b894;
+      --lazy: #fd79a8;
+      --neutral: #fdcb6e;
+      --silly: #a29bfe;
+      --dark: #2d3436;
+      --light: #f5f6fa;
+      --card-bg: rgba(255, 255, 255, 0.15);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #0984e3, #6c5ce7);
+      color: var(--light);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      transition: background 0.5s ease;
+    }
+    
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+    }
+    
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #fd79a8, #ffeaa7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .productivity-meter {
+      height: 12px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      margin: 25px 0;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .meter-progress {
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .meter-progress::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0) 100%);
+      animation: shine 2s infinite;
+    }
+    
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .response-container {
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: all 0.5s ease;
+    }
+    
+    .emoji-container {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      height: 60px;
+    }
+    
+    #response {
+      font-size: 1.5rem;
+      margin: 10px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+      font-weight: 600;
+    }
+    
+    #task {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 15px;
+      border-radius: 12px;
+      margin: 15px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease 0.1s;
+      font-size: 1.1rem;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,255,255,0.2), 
+                transparent);
+      transition: 0.5s;
+    }
+    
+    .btn:hover::before {
+      left: 100%;
+    }
+    
+    .btn-primary {
+      background: var(--productive);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    
+    .btn-danger {
+      background: var(--lazy);
+      color: white;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn:active {
+      transform: translateY(1px);
+    }
+    
+    .stats-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 25px;
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .stat-value {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 5px;
+    }
+    
+    .visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+    
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      opacity: 0;
+    }
+    
+    .history-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .history-item {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    
+    .history-emoji {
+      margin-right: 10px;
+    }
+    
+    @media (max-width: 600px) {
+      .card {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    /* Animation classes */
+    .bounce {
+      animation: bounce 0.5s ease infinite alternate;
+    }
+    
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
+    }
+    
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+    
+    .tada {
+      animation: tada 0.5s ease;
+    }
+    
+    @keyframes tada {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.2) rotate(5deg); }
+      60% { transform: scale(1.2) rotate(-5deg); }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
-  <h1>Am I Being Productive?</h1>
-  <div id="mood"></div>
-  <div id="response">Let's find out...</div>
-  <div id="task"></div>
-  <button onclick="checkProductivity()">Check Again</button>
-  
-  <script src="script.js"></script>
+  <div class="app-container">
+    <div class="card">
+      <h1>Productivity Pulse Check</h1>
+      
+      <div class="productivity-meter">
+        <div class="meter-progress" id="productivityMeter"></div>
+      </div>
+      
+      <div class="response-container">
+        <div class="emoji-container" id="emojiContainer">💭</div>
+        <div id="response">Ready to check your productivity pulse?</div>
+        <div id="task"></div>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="btn btn-primary" onclick="checkProductivity()">
+          <i class="fas fa-bolt"></i> Check Now
+        </button>
+        <button class="btn btn-secondary" onclick="showHistory()">
+          <i class="fas fa-history"></i> History
+        </button>
+        <button class="btn btn-danger" onclick="resetStats()">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+      
+      <div class="stats-container">
+        <div class="stat-item">
+          <span>Checks</span>
+          <span class="stat-value" id="checkCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span>Productive</span>
+          <span class="stat-value" id="productiveCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span>Lazy</span>
+          <span class="stat-value" id="lazyCount">0</span>
+        </div>
+      </div>
+      
+      <div class="history-card" id="historyCard" style="display: none;">
+        <h3>Your Productivity History</h3>
+        <div id="historyList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced responses with emojis and productivity scores
+    const responses = {
+      productive: [
+        { 
+          quote: "Rockstar mode activated! 🚀", 
+          task: "Keep this momentum going for 25 more minutes.", 
+          emoji: "🚀",
+          score: 90
+        },
+        { 
+          quote: "You're crushing it! 💪", 
+          task: "Tackle your most challenging task next.", 
+          emoji: "💪",
+          score: 85
+        },
+        { 
+          quote: "Productivity overload! 🤯", 
+          task: "Take a 5-minute break to recharge.", 
+          emoji: "🤯",
+          score: 95
+        }
+      ],
+      lazy: [
+        { 
+          quote: "Netflix and chill? 🛋️", 
+          task: "Just do one small task to break the cycle.", 
+          emoji: "🛋️",
+          score: 20
+        },
+        { 
+          quote: "Procrastination level: Expert 🎮", 
+          task: "Set a 10-minute timer and work until it rings.", 
+          emoji: "🎮",
+          score: 15
+        },
+        { 
+          quote: "Are you even trying? 😴", 
+          task: "Stand up and stretch right now.", 
+          emoji: "😴",
+          score: 10
+        }
+      ],
+      neutral: [
+        { 
+          quote: "Meh. Could be better. 🤷", 
+          task: "Make a quick to-do list for the next hour.", 
+          emoji: "🤷",
+          score: 50
+        },
+        { 
+          quote: "Not bad, not great. 😐", 
+          task: "Eliminate one distraction for 30 minutes.", 
+          emoji: "😐",
+          score: 45
+        },
+        { 
+          quote: "Average human productivity. 👨‍💻", 
+          task: "Reply to that one email you've been avoiding.", 
+          emoji: "👨‍💻",
+          score: 55
+        }
+      ],
+      silly: [
+        { 
+          quote: "Squirrel! 🐿️", 
+          task: "Close 5 browser tabs you're not using.", 
+          emoji: "🐿️",
+          score: 30
+        },
+        { 
+          quote: "Productivity? Never heard of her. 🤡", 
+          task: "Drink some water and pretend it's motivation.", 
+          emoji: "🤡",
+          score: 25
+        },
+        { 
+          quote: "I see you're busy... scrolling. 📱", 
+          task: "Put your phone in another room for 15 minutes.", 
+          emoji: "📱",
+          score: 35
+        }
+      ]
+    };
+
+    // State management
+    const state = {
+      checkCount: 0,
+      productiveCount: 0,
+      lazyCount: 0,
+      history: []
+    };
+
+    // DOM elements
+    const responseEl = document.getElementById("response");
+    const taskEl = document.getElementById("task");
+    const emojiContainer = document.getElementById("emojiContainer");
+    const productivityMeter = document.getElementById("productivityMeter");
+    const checkCountEl = document.getElementById("checkCount");
+    const productiveCountEl = document.getElementById("productiveCount");
+    const lazyCountEl = document.getElementById("lazyCount");
+    const historyCard = document.getElementById("historyCard");
+    const historyList = document.getElementById("historyList");
+
+    // Main function to check productivity
+    function checkProductivity() {
+      // Reset animations
+      responseEl.style.opacity = 0;
+      responseEl.style.transform = "translateY(20px)";
+      taskEl.style.opacity = 0;
+      taskEl.style.transform = "translateY(20px)";
+      emojiContainer.style.opacity = 0;
+      emojiContainer.style.transform = "scale(0.5)";
+      productivityMeter.style.width = "0%";
+
+      // Random delay for dramatic effect
+      setTimeout(() => {
+        // Get random response type
+        const responseTypes = Object.keys(responses);
+        const randomType = responseTypes[Math.floor(Math.random() * responseTypes.length)];
+        const responseOptions = responses[randomType];
+        const randomResponse = responseOptions[Math.floor(Math.random() * responseOptions.length)];
+
+        // Update UI
+        responseEl.textContent = randomResponse.quote;
+        taskEl.textContent = `💡 Task: ${randomResponse.task}`;
+        emojiContainer.textContent = randomResponse.emoji;
+        
+        // Set meter progress
+        productivityMeter.style.width = `${randomResponse.score}%`;
+        
+        // Set meter color based on type
+        switch(randomType) {
+          case 'productive':
+            productivityMeter.style.background = "var(--productive)";
+            state.productiveCount++;
+            productiveCountEl.textContent = state.productiveCount;
+            emojiContainer.classList.add("bounce");
+            break;
+          case 'lazy':
+            productivityMeter.style.background = "var(--lazy)";
+            state.lazyCount++;
+            lazyCountEl.textContent = state.lazyCount;
+            emojiContainer.classList.add("shake");
+            break;
+          case 'neutral':
+            productivityMeter.style.background = "var(--neutral)";
+            emojiContainer.classList.add("tada");
+            break;
+          case 'silly':
+            productivityMeter.style.background = "var(--silly)";
+            emojiContainer.classList.add("shake");
+            break;
+        }
+
+        // Update stats
+        state.checkCount++;
+        checkCountEl.textContent = state.checkCount;
+
+        // Add to history
+        const historyItem = {
+          type: randomType,
+          quote: randomResponse.quote,
+          emoji: randomResponse.emoji,
+          timestamp: new Date().toLocaleTimeString()
+        };
+        state.history.unshift(historyItem);
+        if (state.history.length > 5) state.history.pop();
+
+        // Show elements with animation
+        setTimeout(() => {
+          responseEl.classList.add("visible");
+          taskEl.classList.add("visible");
+          emojiContainer.style.opacity = 1;
+          emojiContainer.style.transform = "scale(1)";
+        }, 100);
+
+        // Remove animation classes after they complete
+        setTimeout(() => {
+          emojiContainer.classList.remove("bounce", "shake", "tada");
+        }, 1000);
+
+      }, 500);
+    }
+
+    // Show history panel
+    function showHistory() {
+      if (historyCard.style.display === "none" || !historyCard.style.display) {
+        historyCard.style.display = "block";
+        updateHistoryList();
+      } else {
+        historyCard.style.display = "none";
+      }
+    }
+
+    // Update history list
+    function updateHistoryList() {
+      historyList.innerHTML = "";
+      state.history.forEach(item => {
+        const historyItem = document.createElement("div");
+        historyItem.className = "history-item";
+        historyItem.innerHTML = `
+          <span>
+            <span class="history-emoji">${item.emoji}</span>
+            ${item.quote}
+          </span>
+          <span>${item.timestamp}</span>
+        `;
+        historyList.appendChild(historyItem);
+      });
+    }
+
+    // Reset stats
+    function resetStats() {
+      state.checkCount = 0;
+      state.productiveCount = 0;
+      state.lazyCount = 0;
+      state.history = [];
+      
+      checkCountEl.textContent = "0";
+      productiveCountEl.textContent = "0";
+      lazyCountEl.textContent = "0";
+      
+      historyList.innerHTML = "";
+      historyCard.style.display = "none";
+      
+      // Reset main display
+      responseEl.textContent = "Stats reset! Ready for a fresh start?";
+      taskEl.textContent = "";
+      emojiContainer.textContent = "🔄";
+      productivityMeter.style.width = "0%";
+      
+      // Animation
+      emojiContainer.classList.add("tada");
+      setTimeout(() => emojiContainer.classList.remove("tada"), 1000);
+    }
+
+    // Initial check
+    checkProductivity();
+  </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 # Am I Being Productive? 💭
 
-A lighthearted, interactive website that answers the age-old question: *"Am I being productive?"* — with a twist.  
+A lighthearted, interactive website that answers the age-old question: *"Am I being productive?"* with a twist.  
 Every click gives you a random, witty, or motivational response… and maybe a little push to get back to work.  
 
 ## ✨ Features

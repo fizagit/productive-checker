@@ -1,5 +1,7 @@
 # Am I Being Productive? 💭
 
+# Productivity Pulse Checker ⚡
+
 A lighthearted, interactive website that answers the age-old question: *"Am I being productive?"* with a twist.  
 Every click gives you a random, witty, or motivational response… and maybe a little push to get back to work.  
 
@@ -24,3 +26,5 @@ Sometimes we need a reminder or a laugh when procrastination creeps in right?Thi
 - CSS
 - JavaScript
 
+## 🚀 Live Demo !!
+[Try it here!](https://fizagit.github.io/productive-checker/)

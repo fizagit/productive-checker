@@ -5,6 +5,7 @@
 So hey buddies...
 This is my first official website 🎭.
 It will check if you’re actually being productive… or if you’re just here to get roasted.
+
 ✨ What’s New
 
     Category-based responses 💪 😏 📊 🤪 ,moods range from motivational to sarcastic.

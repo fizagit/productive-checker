@@ -8,7 +8,7 @@
     body {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
       text-align: center;
       padding: 80px 20px;
       min-height: 100vh;
@@ -27,6 +27,7 @@
       font-size: 1em;
       margin-bottom: 10px;
       opacity: 0.8;
+      transition: opacity 0.5s ease-in-out;
     }
 
     #response {
@@ -100,7 +101,6 @@
       const responseEl = document.getElementById("response");
       const categoryEl = document.getElementById("category");
 
-      // Hide old text
       responseEl.style.opacity = 0;
       categoryEl.style.opacity = 0;
 
@@ -113,13 +113,11 @@
         categoryEl.innerText = randomCategory;
         responseEl.innerText = randomMessage;
 
-        // Fade in
         categoryEl.style.opacity = 1;
         responseEl.style.opacity = 1;
       }, 300);
     }
 
-    // Show a random response on first load
     checkProductivity();
   </script>
 

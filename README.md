@@ -14,6 +14,9 @@ Every click gives you a random, witty, or motivational response… and maybe a l
 2. Click **"Check Again"** whenever you need a dose of honesty (or sarcasm).
 3. Repeat until you feel like doing actual work… or not. 😏
 
+## 🚀 Live Demo !!
+[Try it here!](https://fizagit.github.io/productive-checker/)
+
 ## 📸 Preview
 ![Home preview](home.png)
 ![History preview](history.png)
@@ -25,6 +28,3 @@ Sometimes we need a reminder or a laugh when procrastination creeps in right?Thi
 - HTML
 - CSS
 - JavaScript
-
-## 🚀 Live Demo !!
-[Try it here!](https://fizagit.github.io/productive-checker/)

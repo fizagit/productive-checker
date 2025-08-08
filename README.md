@@ -1,13 +1,11 @@
 # Am I Being Productive? 💭
 
-A lighthearted, interactive web app that answers the age-old question: *"Am I being productive?"* — with a twist.  
+A lighthearted, interactive website that answers the age-old question: *"Am I being productive?"* — with a twist.  
 Every click gives you a random, witty, or motivational response… and maybe a little push to get back to work.  
 
 ## ✨ Features
 - 🎯 Multiple response categories — Motivational, Sarcastic, Neutral, and Silly.
 - 🎨 Colorful, gradient-based design with smooth animations.
-- ⚡ Instant results with just a click.
-- 🖤 Works entirely in your browser — no installs, no setup.
 
 ## 🚀 How to Use
 1. Open the HTML file in your browser.
@@ -18,10 +16,10 @@ Every click gives you a random, witty, or motivational response… and maybe a l
 ![App Screenshot](screenshot.png)
 
 ## 💡 Why I Made This
-Sometimes we need a reminder or a laugh when procrastination creeps in? Yes!!  
-This project is my fun take on productivity check-ins, and a tiny escape from the “serious” side of coding.
+Sometimes we need a reminder or a laugh when procrastination creeps in right?This project is my fun take on productivity check-ins, and a tiny escape from the “serious” side of coding.
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Used
 - HTML
 - CSS
 - JavaScript
+

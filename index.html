@@ -6,66 +6,120 @@
   <title>Am I Being Productive?</title>
   <style>
     body {
-      background-color: #f4f4f4;
-      color: #333;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
       font-family: 'Segoe UI', sans-serif;
       text-align: center;
       padding: 80px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     h1 {
       font-size: 2.5em;
       margin-bottom: 40px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    }
+
+    #category {
+      font-size: 1em;
+      margin-bottom: 10px;
+      opacity: 0.8;
     }
 
     #response {
       font-size: 1.8em;
       margin: 20px auto;
       max-width: 600px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      line-height: 1.4;
     }
 
     button {
       padding: 15px 30px;
       font-size: 1.2em;
-      background-color: #007bff;
+      background: #ff7eb3;
       color: #fff;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background: #ff4f81;
+      box-shadow: 0px 6px 20px rgba(0,0,0,0.3);
+      transform: translateY(-2px);
     }
   </style>
 </head>
 <body>
 
   <h1>Am I Being Productive?</h1>
+  <div id="category"></div>
   <div id="response">Let's find out...</div>
   <button onclick="checkProductivity()">Check Again</button>
 
   <script>
-    const responses = [
-      "No. Checking this website doesn't count.",
-      "You’re avoiding something, aren’t you?",
-      "At least you're not on TikTok. Or are you?",
-      "You opened this instead of working? Nice.",
-      "Hmm... does scrolling count as progress?",
-      "Yes. You made it here. That's something.",
-      "Debatable. But you showed up, so good job.",
-      "Maybe... but that to-do list says otherwise.",
-      "You’re thinking about being productive. Step one complete!",
-      "Go drink some water and then try again."
-    ];
+    const categories = {
+      "💪 Motivational": [
+        "🚀 Yes! You're on fire today!",
+        "🔥 Crushing it! Keep going.",
+        "🐢 Slow progress is still progress.",
+        "🏆 Productivity unlocked!",
+        "🥇 You beat yesterday’s productivity!"
+      ],
+      "😏 Sarcastic": [
+        "💤 Nope. You might as well take a nap.",
+        "📱 Put your phone down, we both know why.",
+        "🕒 Procrastination level: Expert.",
+        "🚫 This does NOT count as work.",
+        "😂 Nice try. Get back to it."
+      ],
+      "📊 Neutral": [
+        "🎯 You’re on track… probably.",
+        "📚 Reading this counts… kind of.",
+        "💬 Even talking to me is progress… right?",
+        "🤔 Thinking about work ≠ working.",
+        "🔄 Try again, maybe you'll get a better answer."
+      ],
+      "🤪 Silly/Fun": [
+        "☕ Coffee first, productivity later.",
+        "🙈 Stop hiding from your to-do list.",
+        "🍪 Take a snack break, you earned it.",
+        "🎶 Maybe music will help you focus?",
+        "🌊 Go with the flow… but actually do something."
+      ]
+    };
 
     function checkProductivity() {
-      const random = Math.floor(Math.random() * responses.length);
-      document.getElementById("response").innerText = responses[random];
+      const responseEl = document.getElementById("response");
+      const categoryEl = document.getElementById("category");
+
+      // Hide old text
+      responseEl.style.opacity = 0;
+      categoryEl.style.opacity = 0;
+
+      setTimeout(() => {
+        const categoryNames = Object.keys(categories);
+        const randomCategory = categoryNames[Math.floor(Math.random() * categoryNames.length)];
+        const messages = categories[randomCategory];
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+        categoryEl.innerText = randomCategory;
+        responseEl.innerText = randomMessage;
+
+        // Fade in
+        categoryEl.style.opacity = 1;
+        responseEl.style.opacity = 1;
+      }, 300);
     }
 
-    // Show a random response on first load too
+    // Show a random response on first load
     checkProductivity();
   </script>
 

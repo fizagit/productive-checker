@@ -13,8 +13,8 @@ Every click gives you a random, witty, or motivational response… and maybe a l
 3. Repeat until you feel like doing actual work… or not. 😏
 
 ## 📸 Preview
-![Home preview](.png)
-![History preview](.png)
+![Home preview](home.png)
+![History preview](history.png)
 
 ## 💡 Why I Made This
 Sometimes we need a reminder or a laugh when procrastination creeps in right?This project is my fun take on productivity check-ins, and a tiny escape from the “serious” side of coding.

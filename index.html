@@ -8,40 +8,60 @@
     body {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: #fff;
-      font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      padding: 80px 20px;
+      padding: 40px 20px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      margin: 0;
     }
 
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 40px;
+      font-size: 2.2em;
+      margin-bottom: 20px;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
     }
 
     #category {
-      font-size: 1em;
-      margin-bottom: 10px;
-      opacity: 0.8;
-      transition: opacity 0.5s ease-in-out;
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      opacity: 0.85;
     }
 
-    #response {
-      font-size: 1.8em;
-      margin: 20px auto;
-      max-width: 600px;
+    #responses {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .response-box {
+      background: rgba(255,255,255,0.15);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 1.05em;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
       opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-      line-height: 1.4;
+      transform: translateY(15px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .response-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .response-box img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
     }
 
     button {
-      padding: 15px 30px;
-      font-size: 1.2em;
+      padding: 12px 25px;
+      font-size: 1.1em;
       background: #ff7eb3;
       color: #fff;
       border: none;
@@ -56,66 +76,77 @@
       box-shadow: 0px 6px 20px rgba(0,0,0,0.3);
       transform: translateY(-2px);
     }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 1.8em;
+      }
+      .response-box {
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 <body>
 
   <h1>Am I Being Productive?</h1>
   <div id="category"></div>
-  <div id="response">Let's find out...</div>
+  <div id="responses"></div>
   <button onclick="checkProductivity()">Check Again</button>
 
   <script>
     const categories = {
-      "💪 Motivational": [
-        "🚀 Yes! You're on fire today!",
-        "🔥 Crushing it! Keep going.",
-        "🐢 Slow progress is still progress.",
-        "🏆 Productivity unlocked!",
-        "🥇 You beat yesterday’s productivity!"
+      "Motivational": [
+        { text: "You're on fire today! Write down your next big task.", img: "https://via.placeholder.com/300x200/ff7eb3/ffffff?text=Focus" },
+        { text: "Crushing it! Finish that one thing you’ve been avoiding.", img: "https://via.placeholder.com/300x200/ffb347/ffffff?text=Keep+Going" },
+        { text: "Slow progress is still progress. Tidy your workspace for 5 minutes.", img: "https://via.placeholder.com/300x200/76b852/ffffff?text=Step+By+Step" },
+        { text: "Productivity unlocked! Reward yourself with a stretch break.", img: "https://via.placeholder.com/300x200/36d1dc/ffffff?text=Stretch" },
+        { text: "You beat yesterday’s productivity! Send that one email now.", img: "https://via.placeholder.com/300x200/f7971e/ffffff?text=One+More+Task" }
       ],
-      "😏 Sarcastic": [
-        "💤 Nope. You might as well take a nap.",
-        "📱 Put your phone down, we both know why.",
-        "🕒 Procrastination level: Expert.",
-        "🚫 This does NOT count as work.",
-        "😂 Nice try. Get back to it."
+      "Sarcastic": [
+        { text: "Nope. Might as well take a nap. Or pretend to brainstorm.", img: "https://via.placeholder.com/300x200/333333/ffffff?text=Nap+Time" },
+        { text: "Put your phone down. Seriously. 10 minutes, no touching.", img: "https://via.placeholder.com/300x200/dd2476/ffffff?text=Phone+Away" },
+        { text: "Procrastination level: Expert. Write one bullet point.", img: "https://via.placeholder.com/300x200/2c3e50/ffffff?text=Procrastinator" },
+        { text: "This does NOT count as work. Open the actual project.", img: "https://via.placeholder.com/300x200/c31432/ffffff?text=Get+Back+To+Work" },
+        { text: "Nice try. Pick literally any task from your list.", img: "https://via.placeholder.com/300x200/ff416c/ffffff?text=Do+It" }
       ],
-      "📊 Neutral": [
-        "🎯 You’re on track… probably.",
-        "📚 Reading this counts… kind of.",
-        "💬 Even talking to me is progress… right?",
-        "🤔 Thinking about work ≠ working.",
-        "🔄 Try again, maybe you'll get a better answer."
+      "Neutral": [
+        { text: "You’re on track… probably. Check your calendar.", img: "https://via.placeholder.com/300x200/5a3f37/ffffff?text=Calendar+Check" },
+        { text: "Reading this counts… kind of. Now open the right tab.", img: "https://via.placeholder.com/300x200/00c6ff/ffffff?text=Open+Tab" },
+        { text: "Talking to me is progress… right? Make one small decision.", img: "https://via.placeholder.com/300x200/7f00ff/ffffff?text=Decide" },
+        { text: "Thinking about work is not the same as working. Type one sentence.", img: "https://via.placeholder.com/300x200/43cea2/ffffff?text=Write+It" },
+        { text: "Try again, maybe you'll get a better answer. Also drink water.", img: "https://via.placeholder.com/300x200/f7971e/ffffff?text=Hydrate" }
       ],
-      "🤪 Silly/Fun": [
-        "☕ Coffee first, productivity later.",
-        "🙈 Stop hiding from your to-do list.",
-        "🍪 Take a snack break, you earned it.",
-        "🎶 Maybe music will help you focus?",
-        "🌊 Go with the flow… but actually do something."
+      "Silly/Fun": [
+        { text: "Coffee first, productivity later. Keep it short though.", img: "https://via.placeholder.com/300x200/ff9966/ffffff?text=Coffee" },
+        { text: "Stop hiding from your to-do list. Name your top 3 priorities.", img: "https://via.placeholder.com/300x200/ff5f6d/ffffff?text=Priorities" },
+        { text: "Take a snack break, then finish one tiny task.", img: "https://via.placeholder.com/300x200/ffc371/ffffff?text=Snack" },
+        { text: "Maybe music will help. Pick a song and start.", img: "https://via.placeholder.com/300x200/4facfe/ffffff?text=Music" },
+        { text: "Pretend you’re on a reality show. Impress imaginary viewers.", img: "https://via.placeholder.com/300x200/7b4397/ffffff?text=Showtime" }
       ]
     };
 
     function checkProductivity() {
-      const responseEl = document.getElementById("response");
       const categoryEl = document.getElementById("category");
+      const responsesEl = document.getElementById("responses");
 
-      responseEl.style.opacity = 0;
-      categoryEl.style.opacity = 0;
+      const categoryNames = Object.keys(categories);
+      const randomCategory = categoryNames[Math.floor(Math.random() * categoryNames.length)];
+      const messages = [...categories[randomCategory]];
 
-      setTimeout(() => {
-        const categoryNames = Object.keys(categories);
-        const randomCategory = categoryNames[Math.floor(Math.random() * categoryNames.length)];
-        const messages = categories[randomCategory];
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+      categoryEl.textContent = randomCategory;
 
-        categoryEl.innerText = randomCategory;
-        responseEl.innerText = randomMessage;
+      const shuffled = messages.sort(() => 0.5 - Math.random()).slice(0, 3);
 
-        categoryEl.style.opacity = 1;
-        responseEl.style.opacity = 1;
-      }, 300);
+      responsesEl.innerHTML = "";
+
+      shuffled.forEach(item => {
+        const box = document.createElement("div");
+        box.classList.add("response-box");
+        box.innerHTML = `<img src="${item.img}" alt=""><div>${item.text}</div>`;
+        responsesEl.appendChild(box);
+        setTimeout(() => box.classList.add("show"), 50);
+      });
     }
 
     checkProductivity();
